@@ -12,7 +12,7 @@ export default defineConfig({
     coverage: {
       provider: "v8",
       reporter: ["text", "html"],
-      include: ["src/lib/tailor.ts", "src/components/**/*.tsx"],
+      include: ["src/lib/tailor.ts", "src/components/*.tsx"],
     },
   },
 });
