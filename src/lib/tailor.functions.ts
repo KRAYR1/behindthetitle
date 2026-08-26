@@ -18,14 +18,14 @@ export const tailorApplication = createServerFn({ method: "POST" })
     const apiKey = process.env["LOVABLE_API_KEY"];
     if (!apiKey) return fallbackTailor(jobText, resumeText);
 
-    const { generateText, Output } = await import("ai");
+    const { generateObject } = await import("ai");
     const { createLovableAiGatewayProvider } = await import("./ai-gateway.server");
     const gateway = createLovableAiGatewayProvider(apiKey);
 
     try {
-      const { output } = await generateText({
+      const { object: output } = await generateObject({
         model: gateway("google/gemini-2.5-flash"),
-        output: Output.object({ schema: AiSchema }),
+        schema: AiSchema,
         system: buildSystemPrompt(tone),
         prompt: buildUserPrompt(jobText, originals, match.missing),
       });
