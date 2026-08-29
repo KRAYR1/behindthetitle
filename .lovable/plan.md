@@ -1,13 +1,14 @@
-# Add Project Brief to README
+# Remove "Capstone project" label from homepage
 
 ## Goal
-Place the one-paragraph project brief at the top of `README.md` so it answers: what problem the app solves, who it is for, and why this idea was chosen.
+Remove the rendered line that says "Capstone project" from the hero of the Job Application Tailor homepage.
+
+## Location
+`src/routes/index.tsx`, lines 67-70 — a `<p>` badge inside the `<header>` containing the text "Capstone project".
 
 ## Proposed change
-Insert a new "Project Brief" section immediately after the main H1 title in `README.md`.
-
-## Brief text
-Job Application Tailor helps job seekers quickly adapt their resume bullets to match specific job postings, solving the frustrating mismatch between generic resumes and keyword-filtered applicant tracking systems. It is built for active job hunters — from early-career applicants to experienced professionals — who want to spend less time rewriting and more time applying. I chose this idea because it combines a genuinely useful real-world workflow with a clean opportunity to demonstrate meaningful AI integration: a deterministic local fallback plus a structured generative rewrite, showing both resilience and production-ready output.
+Delete the entire `<p className="inline-flex ...">...</p>` element (lines 67-70) so the header flows directly from the top padding to the `<h1>`.
 
 ## Verification
-- Read the updated `README.md` to confirm the brief appears directly under the title and reads as a single paragraph.
+- Read the updated `src/routes/index.tsx` to confirm the badge is gone.
+- Check the live preview to confirm the hero no longer displays "Capstone project".
