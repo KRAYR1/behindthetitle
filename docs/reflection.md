@@ -3,7 +3,7 @@
 ## What I set out to prove
 
 That an AI feature can be genuinely useful without being a chatbot, and without
-the app falling over when the model does. The job-application tailor was chosen
+the app falling over when the model does. JobLens was chosen
 because it has a real failure mode worth engineering around: resume tools that
 hallucinate get candidates caught in interviews.
 

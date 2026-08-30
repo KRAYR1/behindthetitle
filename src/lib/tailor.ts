@@ -1,5 +1,5 @@
 /**
- * Pure, framework-free domain logic for the job-application tailor.
+ * Pure, framework-free domain logic for JobLens.
  * Everything here is deterministic and unit-tested (src/lib/tailor.test.ts).
  * It also powers the offline fallback when the AI gateway is unavailable.
  */
