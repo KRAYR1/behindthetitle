@@ -1,4 +1,4 @@
-# JobLens
+# Job Application Tailor
 
 Paste a job posting and your own resume bullets. The app scores how well your
 experience matches the posting's language, rewrites each bullet so it speaks to

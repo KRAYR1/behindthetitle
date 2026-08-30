@@ -10,7 +10,7 @@ import { TailorForm, type Tone } from "@/components/TailorForm";
 import { tailorApplication } from "@/lib/tailor.functions";
 import { validateInput, type TailorResult } from "@/lib/tailor";
 
-const TITLE = "JobLens — rewrite resume bullets for any posting";
+const TITLE = "Job Application Tailor — rewrite resume bullets for any posting";
 const DESCRIPTION =
   "Paste a job posting and your resume bullets. Get an honest keyword match score, AI-rewritten bullets, and the gaps you should address before applying.";
 
