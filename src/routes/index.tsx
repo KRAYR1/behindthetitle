@@ -64,10 +64,6 @@ function Index() {
     <main className="min-h-screen">
       <header className="paper-grid border-b border-border">
         <div className="mx-auto max-w-5xl px-4 py-14 sm:py-20">
-          <p className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-xs font-medium text-muted-foreground">
-            <FileText aria-hidden="true" className="size-3.5" />
-            Capstone project
-          </p>
           <h1 className="mt-4 max-w-3xl font-display text-4xl font-bold leading-tight text-foreground sm:text-5xl">
             Stop guessing why your application was filtered out.
           </h1>
