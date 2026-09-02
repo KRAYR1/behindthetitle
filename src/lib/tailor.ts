@@ -27,6 +27,8 @@ export interface TailorResult {
   bullets: TailoredBullet[];
   gaps: string[];
   source: "ai" | "fallback";
+  /** Why the AI rewrite was skipped, when source is "fallback". */
+  reason?: string;
 }
 
 const TOKEN_RE = /[a-z0-9][a-z0-9+#.\-/]*/g;
