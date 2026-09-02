@@ -27,6 +27,8 @@ export interface TailorResult {
   bullets: TailoredBullet[];
   gaps: string[];
   source: "ai" | "fallback";
+  /** Why the AI rewrite was skipped, when source is "fallback". */
+  reason?: string;
 }
 
 const TOKEN_RE = /[a-z0-9][a-z0-9+#.\-/]*/g;
@@ -95,7 +97,11 @@ export function scoreLabel(score: number): string {
  * Deterministic, no-network tailoring used when the AI call fails.
  * Never invents achievements — it only surfaces the keyword analysis.
  */
-export function fallbackTailor(jobText: string, resumeText: string): TailorResult {
+export function fallbackTailor(
+  jobText: string,
+  resumeText: string,
+  reason?: string,
+): TailorResult {
   const match = computeMatch(jobText, resumeText);
   const bullets = splitBullets(resumeText)
     .slice(0, 6)
@@ -114,5 +120,6 @@ export function fallbackTailor(jobText: string, resumeText: string): TailorResul
     bullets,
     gaps: match.missing.slice(0, 6).map((k) => `The posting mentions "${k}" but your bullets do not.`),
     source: "fallback",
+    ...(reason ? { reason } : {}),
   };
 }
