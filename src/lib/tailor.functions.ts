@@ -16,49 +16,73 @@ export const tailorApplication = createServerFn({ method: "POST" })
     const originals = splitBullets(resumeText).slice(0, 8);
 
     const apiKey = process.env["LOVABLE_API_KEY"];
-    if (!apiKey) return fallbackTailor(jobText, resumeText);
+    if (!apiKey)
+      return fallbackTailor(jobText, resumeText, "The AI service is not configured for this deployment.");
 
     const { generateObject } = await import("ai");
     const { createLovableAiGatewayProvider } = await import("./ai-gateway.server");
     const gateway = createLovableAiGatewayProvider(apiKey);
 
-    try {
-      const { object: output } = await generateObject({
+    const run = () =>
+      generateObject({
         model: gateway("google/gemini-2.5-flash"),
         schema: AiSchema,
         system: buildSystemPrompt(tone),
         prompt: buildUserPrompt(jobText, originals, match.missing),
       });
 
-      const bullets = output.bullets
-        .filter((b) => b.rewritten.trim().length > 0)
-        .map((b, i) => ({
-          original: b.original?.trim() || originals[i] || "",
-          rewritten: b.rewritten.trim(),
-          rationale: b.rationale?.trim() || "Aligned with the posting.",
-          keywords: (b.keywords ?? []).slice(0, 5),
-        }));
+    const statusOf = (error: unknown) =>
+      (error as { statusCode?: number; status?: number })?.statusCode ??
+      (error as { status?: number })?.status;
 
-      if (bullets.length === 0) return fallbackTailor(jobText, resumeText);
-
-      const rewrittenMatch = computeMatch(jobText, bullets.map((b) => b.rewritten).join("\n"));
-
-      return {
-        match: rewrittenMatch.score >= match.score ? rewrittenMatch : match,
-        summary: output.summary.trim(),
-        bullets,
-        gaps: output.gaps.slice(0, 5),
-        source: "ai",
-      };
-    } catch (error) {
-      const status =
-        (error as { statusCode?: number; status?: number })?.statusCode ??
-        (error as { status?: number })?.status;
+    let output: Awaited<ReturnType<typeof run>>["object"];
+    try {
+      output = (await run()).object;
+    } catch (firstError) {
+      const status = statusOf(firstError);
       if (status === 429)
         throw new Error("The AI service is rate limited right now. Please try again in a minute.");
       if (status === 402)
         throw new Error("AI credits are exhausted for this workspace. Add credits to continue.");
-      console.error("tailorApplication AI failure", error);
-      return fallbackTailor(jobText, resumeText);
+
+      // Structured-output responses occasionally come back malformed; one retry
+      // recovers most of those before we drop to the offline analysis.
+      try {
+        output = (await run()).object;
+      } catch (error) {
+        const retryStatus = statusOf(error);
+        if (retryStatus === 429)
+          throw new Error("The AI service is rate limited right now. Please try again in a minute.");
+        if (retryStatus === 402)
+          throw new Error("AI credits are exhausted for this workspace. Add credits to continue.");
+        console.error("tailorApplication AI failure", error);
+        return fallbackTailor(
+          jobText,
+          resumeText,
+          "The AI service did not return a usable rewrite after two attempts.",
+        );
+      }
     }
+
+    const bullets = output.bullets
+      .filter((b) => b.rewritten.trim().length > 0)
+      .map((b, i) => ({
+        original: b.original?.trim() || originals[i] || "",
+        rewritten: b.rewritten.trim(),
+        rationale: b.rationale?.trim() || "Aligned with the posting.",
+        keywords: (b.keywords ?? []).slice(0, 5),
+      }));
+
+    if (bullets.length === 0)
+      return fallbackTailor(jobText, resumeText, "The AI service returned no usable bullets.");
+
+    const rewrittenMatch = computeMatch(jobText, bullets.map((b) => b.rewritten).join("\n"));
+
+    return {
+      match: rewrittenMatch.score >= match.score ? rewrittenMatch : match,
+      summary: output.summary.trim(),
+      bullets,
+      gaps: output.gaps.slice(0, 5),
+      source: "ai",
+    };
   });
