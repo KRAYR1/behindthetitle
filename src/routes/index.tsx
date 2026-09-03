@@ -101,6 +101,7 @@ function Index() {
                 <AlertTriangle aria-hidden="true" className="mt-0.5 size-4 shrink-0 text-warning" />
                 AI rewriting is unavailable right now, so you are seeing the offline keyword analysis.
                 Your bullets are shown unchanged.
+                {result.reason && <span className="block pt-1 text-muted-foreground">{result.reason}</span>}
               </p>
             )}
 
