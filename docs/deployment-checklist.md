@@ -18,6 +18,18 @@
 | --- | --- | --- | --- |
 | `LOVABLE_API_KEY` | server only | no | Lovable AI Gateway key. Read inside the server-function handler; never exposed to the browser. Absent ⇒ the app degrades to the deterministic fallback. |
 
+### Deploying outside Lovable (Vercel, Netlify, …)
+
+Lovable injects `LOVABLE_API_KEY` in the Lovable preview and on Lovable
+hosting only. On any other host:
+
+- [ ] Add `LOVABLE_API_KEY` in the host's environment settings (Vercel:
+      Settings → Environment Variables) for Production, Preview and
+      Development. Server-side variable — never prefix it with `VITE_`.
+- [ ] Redeploy: environment changes do not apply to builds that already ran.
+- [ ] Re-test one tailoring request; the "AI is not configured on this
+      deployment" notice must be gone.
+
 There is no database, no auth, no storage bucket and no migration step. Nothing
 the user pastes is persisted, logged or sent anywhere except the AI gateway for
 the duration of the request.

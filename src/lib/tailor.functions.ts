@@ -17,7 +17,11 @@ export const tailorApplication = createServerFn({ method: "POST" })
 
     const apiKey = process.env["LOVABLE_API_KEY"];
     if (!apiKey)
-      return fallbackTailor(jobText, resumeText, "The AI service is not configured for this deployment.");
+      return fallbackTailor(
+        jobText,
+        resumeText,
+        "AI is not configured on this deployment — set the LOVABLE_API_KEY environment variable on your host and redeploy.",
+      );
 
     const { generateObject } = await import("ai");
     const { createLovableAiGatewayProvider } = await import("./ai-gateway.server");
