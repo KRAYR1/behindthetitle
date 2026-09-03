@@ -53,6 +53,20 @@ The key is read **inside the server function handler** and never reaches the
 browser. No other configuration is needed — there is no database and nothing a
 user pastes is persisted.
 
+### Deploying outside Lovable (Vercel, Netlify, …)
+
+Lovable injects `LOVABLE_API_KEY` automatically in the Lovable preview and on
+Lovable hosting. Any other host has its own environment, so you must set it
+yourself:
+
+1. Vercel → **Settings → Environment Variables** → add `LOVABLE_API_KEY` for
+   Production, Preview and Development. It is a **server-side** variable — do
+   not prefix it with `VITE_`, which would expose it to the browser.
+2. Redeploy. Environment changes do not apply to builds that already ran.
+
+Without it the app still works, but every request degrades to the offline
+keyword analysis and the UI shows “AI is not configured on this deployment.”
+
 ## Architecture
 
 ```text
