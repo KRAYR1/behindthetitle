@@ -8,22 +8,24 @@
 - [ ] `bunx tsgo --noEmit` (or the editor's typecheck) — no type errors.
 - [ ] Manual smoke test: paste a job posting + bullets, submit, confirm a
       rewritten result renders and the copy button works.
-- [ ] Fallback smoke test: unset `LOVABLE_API_KEY` locally, submit, confirm the
-      deterministic keyword analysis still renders with the "AI rewriting was
-      unavailable" notice instead of an error screen.
+- [ ] Fallback smoke test: unset `GEMINI_API_KEY` and `LOVABLE_API_KEY`
+      locally, submit, confirm the deterministic keyword analysis still renders
+      with the "AI rewriting was unavailable" notice instead of an error screen.
 
 ## Environment
 
 | Variable | Scope | Required | Notes |
 | --- | --- | --- | --- |
-| `LOVABLE_API_KEY` | server only | no | Lovable AI Gateway key. Read inside the server-function handler; never exposed to the browser. Absent ⇒ the app degrades to the deterministic fallback. |
+| `GEMINI_API_KEY` | server only | no | Google Gemini API key, preferred when present. Read inside the server-function handler; never exposed to the browser. |
+| `LOVABLE_API_KEY` | server only | no | Lovable AI Gateway key, used only when no Gemini key is set. Absent along with the Gemini key ⇒ deterministic fallback. |
 
 ### Deploying outside Lovable (Vercel, Netlify, …)
 
-Lovable injects `LOVABLE_API_KEY` in the Lovable preview and on Lovable
-hosting only. On any other host:
+`LOVABLE_API_KEY` is injected in the Lovable preview and on Lovable hosting
+only. On any other host, use your own Gemini key:
 
-- [ ] Add `LOVABLE_API_KEY` in the host's environment settings (Vercel:
+- [ ] Create a key at Google AI Studio.
+- [ ] Add `GEMINI_API_KEY` in the host's environment settings (Vercel:
       Settings → Environment Variables) for Production, Preview and
       Development. Server-side variable — never prefix it with `VITE_`.
 - [ ] Redeploy: environment changes do not apply to builds that already ran.
