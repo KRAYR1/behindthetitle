@@ -94,15 +94,21 @@ function Index() {
             </h2>
 
             {result.source === "fallback" && (
-              <p
+              <div
                 role="status"
-                className="flex items-start gap-2 rounded-lg border border-warning/40 bg-warning/10 p-3 text-sm text-foreground"
+                className="rounded-lg border border-warning/40 bg-warning/10 p-4 text-sm text-foreground"
               >
-                <AlertTriangle aria-hidden="true" className="mt-0.5 size-4 shrink-0 text-warning" />
-                AI rewriting is unavailable right now, so you are seeing the offline keyword analysis.
-                Your bullets are shown unchanged.
-                {result.reason && <span className="block pt-1 text-muted-foreground">{result.reason}</span>}
-              </p>
+                <div className="flex items-start gap-2">
+                  <AlertTriangle aria-hidden="true" className="mt-0.5 size-4 shrink-0 text-warning" />
+                  <div className="space-y-1">
+                    <p className="font-medium">AI rewriting is unavailable right now.</p>
+                    <p>You are seeing the offline keyword analysis and your bullets are shown unchanged.</p>
+                    {result.reason && (
+                      <p className="font-medium text-warning">Reason: {result.reason}</p>
+                    )}
+                  </div>
+                </div>
+              </div>
             )}
 
             <div className="grid gap-6 md:grid-cols-[minmax(0,1fr)_18rem] md:items-start">
