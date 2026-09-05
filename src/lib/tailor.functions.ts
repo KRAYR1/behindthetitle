@@ -15,25 +15,34 @@ export const tailorApplication = createServerFn({ method: "POST" })
     const match = computeMatch(jobText, resumeText);
     const originals = splitBullets(resumeText).slice(0, 8);
 
-    const apiKey = process.env["LOVABLE_API_KEY"];
-    if (!apiKey)
+    const geminiKey = process.env["GEMINI_API_KEY"];
+    const lovableKey = process.env["LOVABLE_API_KEY"];
+    if (!geminiKey && !lovableKey)
       return fallbackTailor(
         jobText,
         resumeText,
-        "AI is not configured on this deployment — set the LOVABLE_API_KEY environment variable on your host and redeploy.",
+        "AI is not configured on this deployment — set the GEMINI_API_KEY environment variable on your host and redeploy.",
       );
 
     const { generateObject } = await import("ai");
-    const { createLovableAiGatewayProvider } = await import("./ai-gateway.server");
-    const gateway = createLovableAiGatewayProvider(apiKey);
+
+    let model;
+    if (geminiKey) {
+      const { createGeminiProvider } = await import("./gemini.server");
+      model = createGeminiProvider(geminiKey)("gemini-2.5-flash");
+    } else {
+      const { createLovableAiGatewayProvider } = await import("./ai-gateway.server");
+      model = createLovableAiGatewayProvider(lovableKey!)("google/gemini-2.5-flash");
+    }
 
     const run = () =>
       generateObject({
-        model: gateway("google/gemini-2.5-flash"),
+        model,
         schema: AiSchema,
         system: buildSystemPrompt(tone),
         prompt: buildUserPrompt(jobText, originals, match.missing),
       });
+
 
     const statusOf = (error: unknown) =>
       (error as { statusCode?: number; status?: number })?.statusCode ??

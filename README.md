@@ -47,25 +47,28 @@ bun run build       # production build
 
 | Variable           | Required | Purpose                                                        |
 | ------------------ | -------- | -------------------------------------------------------------- |
-| `LOVABLE_API_KEY`  | no       | Server-only key for the Lovable AI Gateway. Missing ⇒ fallback. |
+| `GEMINI_API_KEY`   | no       | Server-only Google Gemini API key. Preferred on any host.       |
+| `LOVABLE_API_KEY`  | no       | Server-only key for the Lovable AI Gateway. Used if no Gemini key. |
 
-The key is read **inside the server function handler** and never reaches the
-browser. No other configuration is needed — there is no database and nothing a
-user pastes is persisted.
+Keys are read **inside the server function handler** and never reach the
+browser. `GEMINI_API_KEY` takes priority; if neither key is set the app
+degrades to the deterministic fallback. No other configuration is needed —
+there is no database and nothing a user pastes is persisted.
 
 ### Deploying outside Lovable (Vercel, Netlify, …)
 
-Lovable injects `LOVABLE_API_KEY` automatically in the Lovable preview and on
-Lovable hosting. Any other host has its own environment, so you must set it
-yourself:
+`LOVABLE_API_KEY` is injected automatically only in the Lovable preview and on
+Lovable hosting. On any other host, use your own Gemini key:
 
-1. Vercel → **Settings → Environment Variables** → add `LOVABLE_API_KEY` for
+1. Create a key at Google AI Studio (https://aistudio.google.com/apikey).
+2. Vercel → **Settings → Environment Variables** → add `GEMINI_API_KEY` for
    Production, Preview and Development. It is a **server-side** variable — do
    not prefix it with `VITE_`, which would expose it to the browser.
-2. Redeploy. Environment changes do not apply to builds that already ran.
+3. Redeploy. Environment changes do not apply to builds that already ran.
 
-Without it the app still works, but every request degrades to the offline
+Without a key the app still works, but every request degrades to the offline
 keyword analysis and the UI shows “AI is not configured on this deployment.”
+
 
 ## Architecture
 
