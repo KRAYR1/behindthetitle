@@ -113,7 +113,8 @@ makes the high test coverage cheap and meaningful.
 
 - **Gateway**: Lovable AI Gateway (`https://ai.gateway.lovable.dev/v1`), an
   OpenAI-compatible endpoint, via `@ai-sdk/openai-compatible`.
-- **Model**: `google/gemini-2.5-flash` — fast and inexpensive; the task is
+- **Model**: `gemini-3.6-flash` via a Google Gemini key, or
+  `google/gemini-2.5-flash` via the Lovable AI Gateway — fast and inexpensive; the task is
   rewriting, not reasoning-heavy.
 - **Structured output**: `generateObject` with a Zod schema
   (`summary`, `bullets[]{original, rewritten, rationale, keywords[]}`,

@@ -29,7 +29,7 @@ export const tailorApplication = createServerFn({ method: "POST" })
     let model;
     if (geminiKey) {
       const { createGeminiProvider } = await import("./gemini.server");
-      model = createGeminiProvider(geminiKey)("gemini-2.5-flash");
+      model = createGeminiProvider(geminiKey)("gemini-3.6-flash");
     } else {
       const { createLovableAiGatewayProvider } = await import("./ai-gateway.server");
       model = createLovableAiGatewayProvider(lovableKey!)("google/gemini-2.5-flash");
