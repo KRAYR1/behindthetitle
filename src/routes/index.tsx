@@ -67,7 +67,6 @@ function Index() {
           <p className="font-display text-sm font-semibold uppercase tracking-[0.2em] text-accent">
             {TITLE}
           </p>
-          <p className="mt-2 text-base italic text-muted-foreground">{DESCRIPTION}</p>
           <h1 className="mt-4 max-w-3xl font-display text-4xl font-bold leading-tight text-foreground sm:text-5xl">
             Stop guessing why your application was filtered out.
           </h1>
