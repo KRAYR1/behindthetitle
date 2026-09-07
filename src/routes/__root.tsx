@@ -77,17 +77,15 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "JobLens" },
+      { title: "Behind The Title" },
       {
         name: "description",
-        content:
-          "Tailor your resume bullets to any job posting with an honest keyword match score and AI rewrites.",
+        content: "Paste any job description. See what they're actually asking for.",
       },
-      { property: "og:title", content: "JobLens" },
+      { property: "og:title", content: "Behind The Title" },
       {
         property: "og:description",
-        content:
-          "Tailor your resume bullets to any job posting with an honest keyword match score and AI rewrites.",
+        content: "Paste any job description. See what they're actually asking for.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
