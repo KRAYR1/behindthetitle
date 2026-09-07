@@ -1,4 +1,4 @@
-# JobLens: Turning Job Descriptions into Career Clarity
+# Behind The Title – “Paste any job description. See what they’re actually asking for.”
 
 Paste a job posting and your own resume bullets. The app scores how well your
 experience matches the posting's language, rewrites each bullet so it speaks to
