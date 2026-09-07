@@ -64,7 +64,7 @@ function Index() {
     <main className="min-h-screen">
       <header className="paper-grid border-b border-border">
         <div className="mx-auto max-w-5xl px-4 py-14 sm:py-20">
-          <p className="font-display text-sm font-semibold uppercase tracking-[0.2em] text-primary">
+          <p className="font-display text-sm font-semibold uppercase tracking-[0.2em] text-accent">
             {TITLE}
           </p>
           <p className="mt-2 text-base italic text-muted-foreground">{DESCRIPTION}</p>
